@@ -1,0 +1,33 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: ubuntu
+    username: hax
+    # Generated via: printf toor | mkpasswd -m sha-512 -S badsalt. -s
+    password: $6$badsalt.$YxV1TC3prkVGQadm4Jq5H3o52q34ukR6L7I0tqnoq5BSB33buc9wZp66IQTxegrCSR.3EfWuy5mFxdn3eHpiQ/
+  early-commands:
+    # otherwise packer tries to connect and exceed max attempts:
+    - systemctl stop ssh
+  ssh:
+    install-server: true
+  user-data:
+    preserve_hostname: false
+    users: 
+      - name: hax
+        ssh_import_id:
+          - gh:haxwithaxe
+        passwd: $6$badsalt.$YxV1TC3prkVGQadm4Jq5H3o52q34ukR6L7I0tqnoq5BSB33buc9wZp66IQTxegrCSR.3EfWuy5mFxdn3eHpiQ/
+        groups:
+          - hax
+          - adm
+          - cdrom
+          - sudo
+          - dip
+          - plugdev
+          - lxd
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        gecos: haxwithaxe
+        lock_passwd: false
+        shell: /bin/bash
+
